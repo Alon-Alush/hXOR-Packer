@@ -1,43 +1,47 @@
 #include "packingInfo.h"
+#include <iostream>
+#include <string>
 
-/********************************************************************
-this prograom can only accepts one valid EXE files.
-It will then pack them into one exe file, for example, calling it output.exe.
-the output.exe will unpack the exe files and run them at the same time.
-
-this program will only run with arguments in the terminal.
-it will never ask for user input during runtime
-it will only display if it is success or fail.
-********************************************************************/
-
-int main(int argc, char *argv[]){
-    //display how to use this
-    if (argc < 3){ //not enough arguments to proceed
-        printf("hXOR Packer by Afif, 2012"
-               "\n--------------------------------------------------------------------------\n"
-               "How to use?\n\n"
-               "For Packing:\n"
-               "<S> -> EXE File (Absolute Path)\n"
-               "<D> -> Destination Output (Absolute Path)\n"
-               "<P> -> Parameters (Optional)\n"
-               "<K> -> Xor Encryption Key in numbers (Optional)\n"
-               "\nAvaliable Parameters (Optional):\n"
-               "-c\t\tCompression\n-e\t\tEncryption\n-ce\t\tCompression & Encryption\n\nExamples:\n"
-               ">>>packer.exe <S> <D> <P> <K>\n"
-               ">>>packer.exe C:\\in.exe C:\\folder\\out.exe\n"
-               ">>>packer.exe C:\\in.exe C:\\folder\\out.exe -ce 56213\n\n"
-               );
-    }
-
-    if(argc >= 3){ //packing
-        printf("hXOR Packer by Afif, 2012"
-               "\n--------------------------------------------------------------------------\n");
+/**
+ * hXOR Packer by Afif, 2012
+ * This program packs one valid EXE file into a self-extracting executable.
+ * The output EXE will unpack the original EXE and run it.
+ * This program operates solely via command-line arguments and does not accept
+ * user input during runtime.
+ */
+int main(int argc, char *argv[]) {
+    const std::string BANNER = "hXOR Packer by Afif, 2012\n"
+                              "--------------------------------------------------------------------------\n";
+    
+    std::cout << BANNER;
+    
+    // Check if we have enough arguments to proceed
+    if (argc < 3) {
+        // Display usage instructions
+        std::cout << "How to use?\n\n"
+                  << "For Packing:\n"
+                  << "<S> -> EXE File (Absolute Path)\n"
+                  << "<D> -> Destination Output (Absolute Path)\n"
+                  << "<P> -> Parameters (Optional)\n"
+                  << "<K> -> Xor Encryption Key in numbers (Optional)\n"
+                  << "\nAvailable Parameters (Optional):\n"
+                  << "-c\t\tCompression\n"
+                  << "-e\t\tEncryption\n"
+                  << "-ce\t\tCompression & Encryption\n\n"
+                  << "Examples:\n"
+                  << ">>>packer.exe <S> <D> <P> <K>\n"
+                  << ">>>packer.exe C:\\in.exe C:\\folder\\out.exe\n"
+                  << ">>>packer.exe C:\\in.exe C:\\folder\\out.exe -ce 56213\n\n";
+    } else {
+        // Proceed with packing
         int resultError = packFileIntoArchive(argc, argv);
-
-        if(resultError != PESuccess)
-            printf("Error: %s \n", PEerrors_str[resultError]);
+        
+        // Display error message if operation failed
+        if (resultError != PESuccess) {
+            std::cerr << "Error: " << PEerrors_str[resultError] << std::endl;
+        }
     }
-
+    
     system("PAUSE");
     return 0;
 }
